@@ -24,5 +24,10 @@ public class AppController {
     public String getAddress(HttpServletRequest request, HttpServletResponse response ){
         return "123 Main Street";
     }
+    
+    @RequestMapping(value ="/getName", method=RequestMethod.GET)
+    public String getName(HttpServletRequest request, HttpServletResponse response ){
+        return "My Name";
+    }
 
 }
