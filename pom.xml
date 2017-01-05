@@ -5,7 +5,7 @@
 
 	<groupId>com.example</groupId>
 	<artifactId>releasetest</artifactId>
-	<version>${version.number}</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>releasetest</name>
@@ -22,9 +22,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<!-- we can define a Maven property for our version number that contains the commit 
-			timestamp and hash. -->
-		<version.number>${git.commit.time}.${git.commit.id.abbrev}</version.number>
 	</properties>
 
 	<dependencies>
@@ -40,6 +37,17 @@
 		</dependency>
 	</dependencies>	
 	
+	<scm>
+    	<connection>scm:git:https://github.com/lingamt2010/versiontest.git</connection>
+	</scm>
+
+	<distributionManagement>
+	    <repository>
+	        <id>artifact-repository</id>
+	        <url>file:${project.build.directory}/repository/</url>
+	    </repository>
+	</distributionManagement>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -47,27 +55,41 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			
-			<!-- We use the git-commit-id-plugin. The plugin reads the commit hash and the
-				 commit timestamp from the .git directory and makes it available in the pom
-				 via Maven properties -->
 			<plugin>
-			    <groupId>pl.project13.maven</groupId>
-			    <artifactId>git-commit-id-plugin</artifactId>
-			    <version>2.2.1</version>
-			    <executions>
-			        <execution>
-			            <phase>validate</phase>
-			            <goals>
-			                <goal>revision</goal>
-			            </goals>
-			        </execution>
-			    </executions>
-			    <configuration>
-			        <dateFormat>yyyyMMdd-HHmmss</dateFormat><!--  human-readable part of the version number -->
-			        <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
-			        <generateGitPropertiesFile>false</generateGitPropertiesFile><!-- somehow necessary. otherwise the variables are not available in the pom -->
-			    </configuration>
-			</plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.15</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <deployAtEnd>true</deployAtEnd>
+                </configuration>
+            </plugin>
+			<plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>versions-maven-plugin</artifactId>
+	            <version>2.1</version>
+	        </plugin>
+	        <plugin>
+	            <artifactId>maven-scm-plugin</artifactId>
+	            <version>1.8.1</version>
+	            <configuration>
+	                <tag>${project.artifactId}-${project.version}</tag>
+	            </configuration>
+	        </plugin>			
 		</plugins>
 	</build>
 
